@@ -24,27 +24,27 @@ public class JwtService {
 
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
-            .subject(userDetails.getUsername())
-            .issuedAt(new Date())
-            .expiration(new Date(System.currentTimeMillis() + expiration))
-            .signWith(getSigningKey())
-            .compact();
+                .subject(userDetails.getUsername())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigningKey())
+                .compact();
     }
 
     public String extractUsername(String token) {
         return Jwts.parser()
-            .verifyWith(getSigningKey())
-            .build()
-            .parseSignedClaims(token)
-            .getPayload()
-            .getSubject();
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         try {
             String username = extractUsername(token);
             return username.equals(userDetails.getUsername())
-                && !isTokenExpired(token);
+                    && !isTokenExpired(token);
         } catch (JwtException e) {
             return false;
         }
@@ -52,11 +52,11 @@ public class JwtService {
 
     private boolean isTokenExpired(String token) {
         return Jwts.parser()
-            .verifyWith(getSigningKey())
-            .build()
-            .parseSignedClaims(token)
-            .getPayload()
-            .getExpiration()
-            .before(new Date());
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getExpiration()
+                .before(new Date());
     }
 }
